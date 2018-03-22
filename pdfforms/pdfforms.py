@@ -111,7 +111,12 @@ def fill_form(input_path, fdf, output_path):
     cmd = ["pdftk", input_path,
             "fill_form", "-",
             "output", output_path, "flatten"]
-    run(cmd, input=fdf, check=True, encoding="utf-8")
+    if sys.version_info >= (3, 6):  
+        # `encoding` argument only for Python 3.6+
+        # "If encoding or errors are specified, or universal_newlines is true, file objects for stdin, stdout and stderr are opened in text mode"
+        run(cmd, input=fdf, check=True, encoding="utf-8")  
+    else:
+        run(cmd, input=fdf, check=True, universal_newlines=True)
 
 
 def generate_test_data(pdf_files, field_defs):
